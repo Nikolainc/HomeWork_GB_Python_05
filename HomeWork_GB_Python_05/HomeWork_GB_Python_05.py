@@ -5,7 +5,7 @@ import time
 
 # 0 - пустое поле, 1 - корабль, 7 - выстрел без попадания, 9 - попадание
 
-def PrintMap(array, view = False):
+def PrintMap(array, view = False): # Вывод карты. 2 атрибута. С видимыми кораблями и скрытыми
     if view:
         print("Y:    ", end="")
         for i in range(len(array)):
@@ -51,7 +51,7 @@ def PrintMap(array, view = False):
                     print(f"■", end=" ")
             print("")
 
-def CountOfBoats(array):
+def CountOfBoats(array): # подсчет оставшихся кораблей
     counter = 0
     for i in range(0,len(array)):
         for j in range(0, len(array)):
@@ -59,7 +59,7 @@ def CountOfBoats(array):
                 counter += 1
     return counter
 
-def IsPosition(array, Y, X):
+def IsPosition(array, Y, X): # проверка возможности установить корабль на позицию
     result = True
     for i in range(Y - 1, Y + 2):
         for j in range(X - 1, X + 2):
@@ -69,10 +69,10 @@ def IsPosition(array, Y, X):
                 return False
     return result
 
-def GetRandomPosition(array):
+def GetRandomPosition(array): # возвращает рандомное значение для поцизии корбаля по одной оси
     return randint(0,len(array)-1)
 
-def SetBattleMapOneBoat(array):
+def SetBattleMapOneBoat(array): # устанавливает на карте одиночные корабли
     while CountOfBoats(array) < 5:
         Y = GetRandomPosition(array)
         X = GetRandomPosition(array)
@@ -84,7 +84,7 @@ def SetBattleMapOneBoat(array):
                     array[i][j] = 5
             array[Y][X] = 1
 
-def SetBattleMapTwoBoat(array):
+def SetBattleMapTwoBoat(array): # устанавливает на карте двухпалубные корабли с рандомным поворотом
     while CountOfBoats(array) < 9:
         Y_1 = GetRandomPosition(array)
         X_1 = GetRandomPosition(array)
@@ -114,7 +114,7 @@ def SetBattleMapTwoBoat(array):
             array[Y_1][X_1] = 1
             array[Y_2][X_2] = 1
 
-def MakeTurn(array, player = False):
+def MakeTurn(array, player = False): # метод позволяющий сделать ход, записыввает изменения в переданном массиве 
     if player:
         while True:
             Y = int(input("Введите координаты по Y для нанесения удара: "))
