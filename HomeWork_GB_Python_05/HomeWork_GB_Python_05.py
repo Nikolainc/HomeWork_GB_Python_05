@@ -41,9 +41,11 @@ def SetBattleMap(array, counter = 10):
         while True:
             Y = randint(0, len(array) - 1)
             X = randint(0, len(array) - 1)
+
             #if array[Y][X] == 0:
             #    array[Y][X] = 1
             #    break
+
         counter -= 1
 
 
