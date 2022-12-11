@@ -1,5 +1,4 @@
 ﻿from random import randint, random
-from turtle import right
 
 def PrintMap(array, view = False):
     if view:
@@ -14,7 +13,14 @@ def PrintMap(array, view = False):
         for i in range(len(array)):
             print(f"X: {i}| ", end="")
             for j in range(len(array[i])):
-                print(f"{array[i][j]}", end=" ")
+                if array[i][j] == 0 or array[i][j] == 5:
+                    print(f"■", end=" ")
+                elif array[i][j] == 7:
+                    print(f"○", end=" ")
+                elif array[i][j] == 9:
+                    print(f"☑", end=" ")
+                elif array[i][j] == 1:
+                    print(f"□", end=" ")
             print("")
     else:
         print("Y:    ", end="")
@@ -28,24 +34,38 @@ def PrintMap(array, view = False):
         for i in range(len(array)):
             print(f"X: {i}| ", end="")
             for j in range(len(array[i])):
-                if array[i][j] == 0 or array[i][j] == 1:
+                if array[i][j] == 0 or array[i][j] == 1 or array[i][j] == 5:
                     print(f"■", end=" ")
-                elif array[i][j] == -2:
+                elif array[i][j] == 7:
                     print(f"○", end=" ")
-                elif array[i][j] == -3:
+                elif array[i][j] == 9:
                     print(f"☑", end=" ")
             print("")
 
+def IsPosition(array, Y, X):
+    result = True
+    for i in range(Y - 1, Y + 2):
+        for j in range(X - 1, X + 2):
+            if i < 0 or i > len(array) - 1 or j < 0 or j > len(array) - 1:
+                continue
+            if array[i][j] != 0:
+                return False
+    return result
+
+
 def SetBattleMap(array, counter = 10):
+    
     while counter > 0:
-        while True:
-            Y = randint(0, len(array) - 1)
-            X = randint(0, len(array) - 1)
-
-            #if array[Y][X] == 0:
-            #    array[Y][X] = 1
-            #    break
-
+        Y = randint(0, len(array) - 1)
+        X = randint(0, len(array) - 1)
+        if IsPosition(array, Y, X):
+            for i in range(Y - 1, Y + 2):
+                for j in range(X - 1, X + 2):
+                    if i < 0 or i > len(array) - 1 or j < 0 or j > len(array) - 1:
+                        continue
+                    array[i][j] = 5
+            array[Y][X] = 1
+            break
         counter -= 1
 
 
