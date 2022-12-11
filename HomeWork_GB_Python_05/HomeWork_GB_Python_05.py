@@ -1,4 +1,4 @@
-﻿from random import randint, random
+﻿from random import randint, randrange
 
 def PrintMap(array, view = False):
     if view:
@@ -13,7 +13,7 @@ def PrintMap(array, view = False):
         for i in range(len(array)):
             print(f"X: {i}| ", end="")
             for j in range(len(array[i])):
-                if array[i][j] == 0 or array[i][j] == 5:
+                if array[i][j] == 0:
                     print(f"■", end=" ")
                 elif array[i][j] == 7:
                     print(f"○", end=" ")
@@ -21,6 +21,8 @@ def PrintMap(array, view = False):
                     print(f"☑", end=" ")
                 elif array[i][j] == 1:
                     print(f"□", end=" ")
+                else:
+                    print(f"+", end=" ")
             print("")
     else:
         print("Y:    ", end="")
@@ -34,12 +36,14 @@ def PrintMap(array, view = False):
         for i in range(len(array)):
             print(f"X: {i}| ", end="")
             for j in range(len(array[i])):
-                if array[i][j] == 0 or array[i][j] == 1 or array[i][j] == 5:
+                if array[i][j] == 0 or array[i][j] == 1:
                     print(f"■", end=" ")
                 elif array[i][j] == 7:
                     print(f"○", end=" ")
                 elif array[i][j] == 9:
                     print(f"☑", end=" ")
+                else:
+                    print(f"■", end=" ")
             print("")
 
 def IsPosition(array, Y, X):
@@ -52,12 +56,13 @@ def IsPosition(array, Y, X):
                 return False
     return result
 
+def GetRandomPosition(array):
+    return randint(0,len(array)-1)
 
-def SetBattleMap(array, counter = 10):
-    
+def SetBattleMap(array, counter = 1000):
     while counter > 0:
-        Y = randint(0, len(array) - 1)
-        X = randint(0, len(array) - 1)
+        Y = GetRandomPosition(array)
+        X = GetRandomPosition(array)
         if IsPosition(array, Y, X):
             for i in range(Y - 1, Y + 2):
                 for j in range(X - 1, X + 2):
@@ -65,9 +70,7 @@ def SetBattleMap(array, counter = 10):
                         continue
                     array[i][j] = 5
             array[Y][X] = 1
-            break
         counter -= 1
-
 
 move_counter = 1
 player_counter = 0
