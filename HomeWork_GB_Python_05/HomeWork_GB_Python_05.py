@@ -1,4 +1,9 @@
-﻿from random import randint
+﻿from itertools import count
+from random import randint
+from time import sleep
+import time
+
+# 0 - пустое поле, 1 - корабль, 7 - выстрел без попадания, 9 - попадание
 
 def PrintMap(array, view = False):
     if view:
@@ -16,7 +21,7 @@ def PrintMap(array, view = False):
                 if array[i][j] == 0:
                     print(f"■", end=" ")
                 elif array[i][j] == 7:
-                    print(f"○", end=" ")
+                    print(f"X", end=" ")
                 elif array[i][j] == 9:
                     print(f"☑", end=" ")
                 elif array[i][j] == 1:
@@ -39,7 +44,7 @@ def PrintMap(array, view = False):
                 if array[i][j] == 0 or array[i][j] == 1:
                     print(f"■", end=" ")
                 elif array[i][j] == 7:
-                    print(f"○", end=" ")
+                    print(f"X", end=" ")
                 elif array[i][j] == 9:
                     print(f"☑", end=" ")
                 else:
@@ -109,18 +114,63 @@ def SetBattleMapTwoBoat(array):
             array[Y_1][X_1] = 1
             array[Y_2][X_2] = 1
 
+def MakeTurn(array, player = False):
+    if player:
+        while True:
+            Y = int(input("Введите координаты по Y для нанесения удара: "))
+            if Y < 0 or Y > len(array) - 1:
+                continue
+            X = int(input("Введите координаты по X для нанесения удара: "))
+            if X < 0 or X > len(array) - 1:
+                continue
+            if array[Y][X] == 1:
+                array[Y][X] = 9
+                return True
+            else:
+                array[Y][X] = 7
+                return False
+    else:
+        Y = randint(0, len(array) - 1)
+        X = randint(0, len(array) - 1)
+        if array[Y][X] == 1:
+            array[Y][X] = 9
+            return True
+        else:
+            array[Y][X] = 7
+            return False
+
 move_counter = 1
-player_counter = 0
-enemy_counter = 0
-new_map_enemy = [[0] * 10 for i in range(10)]
-new_map_palyer = [[0] * 10 for i in range(10)]
-SetBattleMapOneBoat(new_map_enemy)
-SetBattleMapOneBoat(new_map_palyer)
-SetBattleMapTwoBoat(new_map_enemy)
-SetBattleMapTwoBoat(new_map_palyer)
+map_enemy = [[0] * 10 for i in range(10)]
+map_palyer = [[0] * 10 for i in range(10)]
+SetBattleMapOneBoat(map_enemy)
+SetBattleMapOneBoat(map_palyer)
+SetBattleMapTwoBoat(map_enemy)
+SetBattleMapTwoBoat(map_palyer)
 
 print(f"\n================= Поле противника =================\n")
-PrintMap(new_map_enemy,False)
+PrintMap(map_enemy, False)
 print(f"\n================= Ваше поле =================\n")
-PrintMap(new_map_palyer,True)
-print(f"\n================= Ход {move_counter} =================\n")
+PrintMap(map_palyer, True)
+
+while CountOfBoats(map_palyer) > 0 or CountOfBoats(map_enemy) > 0:
+    print(f"\n================= Ваш ход {move_counter} =================\n")
+    print(f"У противника {CountOfBoats(map_enemy)} кораблей")
+    if MakeTurn(map_enemy, True):
+        print("\n||||| Попадание! |||||")
+    else:
+        print("\n||||| Промах! |||||")
+    move_counter += 1
+    print(f"\n================= Поле противника =================\n")
+    PrintMap(map_enemy, False)
+    time.sleep(randint(1, 3))
+    if MakeTurn(map_palyer, False):
+        print("\n||||| Попадание! |||||")
+    else:
+        print("\n||||| Промах! |||||")
+    print(f"\n================= Ваше поле =================\n")
+    PrintMap(map_palyer, True)
+
+if CountOfBoats(map_palyer) > 0:
+    print("Победа!")
+else:
+    print("Мы проиграли эту битву..")
